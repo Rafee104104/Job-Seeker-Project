@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<center>
+    <h2>Reset Password</h2><br>
+    <div class="container container-center">
+        <p>Please enter email below to reset your password.</p><br>
+        <form action="{% url 'forget_pass' %}" method="POST" style="max-width: 400px; margin: 0 auto;">
+            {% csrf_token %}
+            <div class="input-group mb-3 ">
+                <span class="input-group-text  bg-info text-dark border-dark" id="email">Email: </span>
+                <input type="text" class="form-control  border-dark bg-info-subtle" name="email"
+                    placeholder="Enter Your Email" aria-label="email" aria-describedby="basic-addon1" required>
+            </div>
+            {% if error %}
+            <div class="error-message">
+                {{ error }}
+            </div>
+            {% endif %}
+            <center><input class="btn btn-success" type="submit" value="Send OTP"></center>
+        </form>
+    </div>
+
+
+</center>
+{% endblock %}

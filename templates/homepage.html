@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<br><br>
+<div class="container container-center">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            {% for job in jobs %}
+            <div class="card border-secondary mb-3" style="max-width: 18rem;">
+                <div class="card-header">{{job.title}}</div>
+                <div class="card-body text-secondary">
+                    <h5 class="card-title">{{job.title}}</h5>
+                    <p class="card-text">{{job.description}}</p>
+                    <a href="{% url 'editJobForm' job.id %}" class="btn btn-primary">Edit</a>
+                    <a href="{% url 'addJobForm' %}" class="btn btn-primary">Add</a>
+                    <a href="{% url 'deleteJobForm' job.id %}" class="btn btn-primary">Delete</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<br><br><br><br>
+<center>
+    <h2>Registraion Page</h2><br>
+</center>
+<center>
+    <p>Welcome to the Sign Up page. Please enter your credentials below to create your account.</p><br>
+</center>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <form method="POST">
+            {% csrf_token %}
+            {{form.as_p}}
+            <br>
+            <center><input class="btn btn-success" type="submit" value="Sign Up"></center>
+        </form>
+        <p class="text-center">
+            <br>
+            <a href="{% url 'userlogin' %}">Already Have account, Sign in here.</a><br><br>             
+        </p>
+    </div>
+</div>
+{% endblock %}

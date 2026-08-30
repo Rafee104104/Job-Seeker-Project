@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<center>
+    <h2>Update Password</h2><br>
+    <div class="container container-center">
+        <p>Please fill out the form below to update the password</p><br>
+        <form action="{% url 'update_pass' %}" method="POST" style="max-width: 400px; margin: 0 auto;">
+            {% csrf_token %}
+            <div class="input-group mb-3 ">
+                <span class="input-group-text  bg-info text-dark border-dark" id="email">Email: </span>
+                <input type="text" class="form-control  border-dark bg-info-subtle" name="email"
+                    placeholder="Enter Your Email" aria-label="email" aria-describedby="basic-addon1" required>
+            </div>
+            <div class="input-group mb-3 ">
+                <span class="input-group-text  bg-info text-dark border-dark" id="new_pass">Password: </span>
+                <input type="password" class="form-control  border-dark bg-info-subtle" name="new_pass"
+                    placeholder="Enter Your New Password" aria-label="new_pass" aria-describedby="basic-addon1" required>
+            </div>
+            <div class="input-group mb-3 ">
+                <span class="input-group-text  bg-info text-dark border-dark" id="confirm_pass">Confirmed Password: </span>
+                <input type="password" class="form-control  border-dark bg-info-subtle" name="confirm_pass"
+                    placeholder="Enter Your New Password" aria-label="confirm_pass" aria-describedby="basic-addon1" required>
+            </div>
+            <div class="input-group mb-3 ">
+                <span class="input-group-text  bg-info text-dark border-dark" id="otp">OTP: </span>
+                <input type="text" class="form-control  border-dark bg-info-subtle" name="otp"
+                    placeholder="Enter Your OTP" aria-label="otp" aria-describedby="basic-addon1" required>
+            </div>
+            {% if error %}
+            <div class="error-message">
+                {{ error }}
+            </div>
+            {% endif %}
+            <center><input class="btn btn-success" type="submit" value="Submit"></center>
+        </form>
+    </div>
+
+
+</center>
+{% endblock %}
