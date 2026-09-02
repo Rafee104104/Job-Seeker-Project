@@ -17,8 +17,8 @@ class LoginForm(AuthenticationForm):
     ))
     class Meta:
         model = CustomUser
-        # fields = ['username','password']
-        fields = ('__all__')
+        fields = ['username','password']
+        # fields = ('__all__')
 
 class RegistrationForm(UserCreationForm):
     username = forms.CharField(label='Username', widget=forms.TextInput(
@@ -47,8 +47,8 @@ class RegistrationForm(UserCreationForm):
     ))
     user_type = forms.ChoiceField(choices = [
         ('','-Select an option-'),
-        ('job_seeker','Job Seeker'),
-        ('recruiter','Recruiter'),
+        ('jobRecruiter','JobSeeker'),
+        ('jobRecruiter','JobRecruiter'),
     ],widget = forms.Select(attrs={
         "class":"form-select w-50"
     }))
@@ -69,17 +69,19 @@ class RegistrationForm(UserCreationForm):
         model = CustomUser
         fields = ['username','email','password1','password2','user_type','display_name']
         # fields = ('__all__')
-class JobSeekerForm(forms.ModelForm):
-    class Meta:
-        model = Job_seeker
-        fields = ('__all__')
 
-class JobRecruiterForm(forms.ModelForm):
-    class Meta:
-        model = Job_recruiter
-        fields = ('__all__')
 
 class JobForm(forms.ModelForm):
     class Meta:
         model = Job
         fields = ('__all__')
+
+class JobRecruiterProfile(forms.ModelForm):
+    class Meta:
+        model = JobRecruiterProfile
+        fields = ['company_name','location','contact_number','contact_email','company_logo']
+
+class JobSeekerProfile(forms.ModelForm):
+    class Meta:
+        model = JobSeekerProfile
+        fields = ['name','email','phone_number','location','image','cv']

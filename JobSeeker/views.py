@@ -7,10 +7,12 @@ from django.core.mail import send_mail
 from core.settings import EMAIL_HOST_USER
 from .forms import *
 from django.contrib.auth.decorators import login_required
+from .models import CustomUser
+from django.db.models import Q
 # Create your views here.
 def homepage(request):
     jobs = Job.objects.all()
-    
+    users = CustomUser.objects.all()
     context = {
         "jobs": jobs
     }
@@ -41,6 +43,7 @@ def userlogin(request):
             user=authenticate(username=username,password=password)
             if user:
                 login(request,user)
+                return redirect('homepage')
     else:
         form = LoginForm()
 
@@ -95,6 +98,8 @@ def send_otp(request):
         return redirect('update_pass')
     return render(request, 'forget_pass.html')
 
+
+
 @login_required
 def addJobForm(request):
     if request.method == "POST":
@@ -108,8 +113,9 @@ def addJobForm(request):
 
 @login_required
 def editJobForm(request,my_id):
+    job = Job.objects.get(id=my_id)
     if request.method == "POST":
-            form = JobForm(request.POST,instance=Job)
+            form = JobForm(request.POST,instance=job)
             if form.is_valid():
                 form.save()
                 return redirect('homepage')
@@ -122,17 +128,33 @@ def deleteJobForm(request,my_id):
     job.delete()
     return redirect('homepage')
 
-@login_required
-def set_profile(request):
-    if request.method == "POST":
-        form = JobRecruiterForm(request.POST,request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('set_profile')
-    else:
-        form = JobRecruiterForm()
-    return render(request,'set_profile.html',{'form':form})
+
 @login_required
 def user_logout(request):
     logout(request)
     return redirect('registration')
+
+@login_required
+def jobRecruiterProfile(request):
+    user = request.user
+    if(request.method == 'POST'):
+            form = JobRecruiterProfile(request.POST,request.FILES,instance = user)
+            if form.is_valid():
+                form.save()
+                return redirect ('jobRecruiterProfile')
+    else:
+        form = JobRecruiterProfile(instance = user)
+    return render(request,'JobRecruiterProfile.html',{'form':form})
+
+@login_required
+def jobSeekerProfile(request):
+    user = request.user
+    if(request.method == 'POST'):
+            form = JobSeekerProfile(request.POST,request.FILES,instance = user)
+            if form.is_valid():
+                form.save()
+                return redirect ('jobSeekerProfile')
+    else:
+        form = JobSeekerProfile(instance = user)
+    return render(request,'jobSeekerProfile.html',{'form':form})
+

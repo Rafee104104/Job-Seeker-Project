@@ -4,15 +4,28 @@
 <div class="container container-center">
     <div class="row justify-content-center">
         <div class="col-md-6">
+            {% if request.user.user_type == 'jobRecruiter' %}
+            <center><a href="{% url 'addJobForm' %}" class="btn btn-primary">Add Job</a> </center>
+            <br><br>
+            {% endif %}
             {% for job in jobs %}
+            
             <div class="card border-secondary mb-3" style="max-width: 18rem;">
                 <div class="card-header">{{job.title}}</div>
                 <div class="card-body text-secondary">
                     <h5 class="card-title">{{job.title}}</h5>
                     <p class="card-text">{{job.description}}</p>
+                    {% if job.is_applied %}
+                    <button>Applied</button>
+                    {% else %}
+                    <button>Apply</button>
+                    {% endif %}
+                    {% if request.user.user_type == 'jobRecruiter' %}
                     <a href="{% url 'editJobForm' job.id %}" class="btn btn-primary">Edit</a>
-                    <a href="{% url 'addJobForm' %}" class="btn btn-primary">Add</a>
+                    {% endif %}
+                    {% if request.user.user_type == 'jobRecruiter' and request.user.is_authenticated %}
                     <a href="{% url 'deleteJobForm' job.id %}" class="btn btn-primary">Delete</a>
+                    {% endif %}
                 </div>
             </div>
             {% endfor %}

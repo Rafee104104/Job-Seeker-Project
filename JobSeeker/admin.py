@@ -1,8 +1,8 @@
 from django.contrib import admin
-from .models import CustomUser,Job,Job_recruiter,Job_seeker
+from .models import CustomUser,Job,JobSeekerProfile,JobRecruiterProfile
 # Register your models here.
 
 admin.site.register(CustomUser)
 admin.site.register(Job)
-admin.site.register(Job_recruiter)
-admin.site.register(Job_seeker)
+admin.site.register(JobRecruiterProfile)
+admin.site.register(JobSeekerProfile)
