@@ -10,10 +10,7 @@ class CustomUser(AbstractUser):
     display_name = models.CharField(max_length=255)
     otp = models.IntegerField(blank=True,null=True)    
     user_type = models.CharField(max_length=50,choices= USER,null=True)
-    """
-    (Title, Number of openings, Category, 
-Job description, Skills set)
-    """
+    
 
     def __str__(self):
         return self.username
@@ -21,11 +18,11 @@ Job description, Skills set)
 
 class JobRecruiterProfile(models.Model):
 
-    users = models.OneToOneField(CustomUser,on_delete=models.DO_NOTHING)
-    company_name = models.CharField(max_length=30)
-    location = models.CharField(max_length=30)
-    contact_number = models.IntegerField(max_length=30)
-    contact_email = models.EmailField(max_length=40)
+    users = models.OneToOneField(CustomUser,on_delete=models.DO_NOTHING, related_name= 'jobrecruiterprofile')
+    company_name = models.CharField(max_length=30 , null= True, blank= True)
+    location = models.CharField(max_length=30 , null= True, blank= True)
+    contact_number = models.IntegerField(max_length=30 , null= True, blank= True)
+    contact_email = models.EmailField(max_length=40 , null= True, blank= True)
     company_logo = models.ImageField(upload_to='media/company_logo/',blank=True,null=True)
 
     def __str__(self):
@@ -33,11 +30,11 @@ class JobRecruiterProfile(models.Model):
 
 class JobSeekerProfile(models.Model):
     
-    users = models.OneToOneField(CustomUser,on_delete=models.DO_NOTHING)
-    name = models.CharField(max_length=30)
-    email = models.EmailField(max_length=40)
-    phone_number = models.IntegerField(max_length=30)
-    location = models.CharField(max_length=30)
+    users = models.OneToOneField(CustomUser,on_delete=models.DO_NOTHING, related_name= 'jobseekerprofile')
+    name = models.CharField(max_length=30 , null= True, blank= True)
+    email = models.EmailField(max_length=40 , null= True, blank= True)
+    phone_number = models.IntegerField(max_length=30 , null= True, blank= True)
+    location = models.CharField(max_length=30 , null= True, blank= True)
     image = models.ImageField(upload_to='media/JobSeekerImage/',blank=True,null=True)
     cv = models.FileField(upload_to='media/JobSeekerCV/',blank=True,null=True)
 
@@ -54,14 +51,17 @@ class Job(models.Model):
         ("internship", "Internship"),
         ("remote", "Remote"),
     ]
-
+    """
+    (Title, Number of openings, Category, 
+    Job description, Skills set)
+    """
     EXPERIENCE_LEVELS = [
         ("entry", "Entry Level"),
         ("mid", "Mid Level"),
         ("senior", "Senior Level"),
     ]
 
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=200 , null= True, blank= True)
     company_name = models.CharField(max_length=200)
     category = models.CharField(max_length=100)
     description = models.CharField(max_length=100)

@@ -7,7 +7,6 @@ from django.core.mail import send_mail
 from core.settings import EMAIL_HOST_USER
 from .forms import *
 from django.contrib.auth.decorators import login_required
-from .models import CustomUser
 from django.db.models import Q
 # Create your views here.
 def homepage(request):
@@ -23,10 +22,23 @@ def registration(request):
     if(request.method == "POST"):
         form = RegistrationForm(request.POST)
         if form.is_valid():
+            user_type = form.cleaned_data.get('user_type')
+            print("User Type = ", user_type)
             user = form.save(commit = False)
             user.set_password(form.cleaned_data['password1'])
             # user.set_password(form.cleaned_data.get('password1')])
             user.save()
+            if user_type == 'jobSeeker':
+                jobSeekers = JobSeekerProfile(
+                    users = user
+                )
+                jobSeekers.save()
+            else:
+                jobRecruiters = JobRecruiterProfile(
+                    users = user
+                )
+                jobRecruiters.save()
+
             return redirect('userlogin')
     else:
         form = RegistrationForm()
@@ -138,23 +150,23 @@ def user_logout(request):
 def jobRecruiterProfile(request):
     user = request.user
     if(request.method == 'POST'):
-            form = JobRecruiterProfile(request.POST,request.FILES,instance = user)
+            form = JobRecruiterProfileForm(request.POST,request.FILES,instance = user)
             if form.is_valid():
                 form.save()
                 return redirect ('jobRecruiterProfile')
     else:
-        form = JobRecruiterProfile(instance = user)
+        form = JobRecruiterProfileForm(instance = user)
     return render(request,'JobRecruiterProfile.html',{'form':form})
 
 @login_required
 def jobSeekerProfile(request):
     user = request.user
     if(request.method == 'POST'):
-            form = JobSeekerProfile(request.POST,request.FILES,instance = user)
+            form = JobSeekerProfileForm(request.POST,request.FILES,instance = user.jobseekerprofile)
             if form.is_valid():
                 form.save()
                 return redirect ('jobSeekerProfile')
     else:
-        form = JobSeekerProfile(instance = user)
+        form = JobSeekerProfileForm(instance = user.jobseekerprofile)
     return render(request,'jobSeekerProfile.html',{'form':form})
 

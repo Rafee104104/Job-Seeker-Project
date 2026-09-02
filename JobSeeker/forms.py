@@ -47,7 +47,7 @@ class RegistrationForm(UserCreationForm):
     ))
     user_type = forms.ChoiceField(choices = [
         ('','-Select an option-'),
-        ('jobRecruiter','JobSeeker'),
+        ('jobSeeker','JobSeeker'),
         ('jobRecruiter','JobRecruiter'),
     ],widget = forms.Select(attrs={
         "class":"form-select w-50"
@@ -76,12 +76,12 @@ class JobForm(forms.ModelForm):
         model = Job
         fields = ('__all__')
 
-class JobRecruiterProfile(forms.ModelForm):
+class JobRecruiterProfileForm(forms.ModelForm):
     class Meta:
         model = JobRecruiterProfile
         fields = ['company_name','location','contact_number','contact_email','company_logo']
 
-class JobSeekerProfile(forms.ModelForm):
+class JobSeekerProfileForm(forms.ModelForm):
     class Meta:
         model = JobSeekerProfile
         fields = ['name','email','phone_number','location','image','cv']
