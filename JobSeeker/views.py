@@ -9,6 +9,8 @@ from .forms import *
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 # Create your views here.
+
+@login_required
 def homepage(request):
     jobs = Job.objects.all()
     users = CustomUser.objects.all()
@@ -117,8 +119,10 @@ def addJobForm(request):
     if request.method == "POST":
         form = JobForm(request.POST,request.FILES)
         if form.is_valid():
-            form.save()
-            return redirect('homepage')
+            job = form.save(commit=False)
+            job.created_by = request.user
+            job.save()
+            return redirect("homepage")
     else:
         form = JobForm()
     return render(request,'addJobForm.html',{'form':form})
@@ -132,7 +136,7 @@ def editJobForm(request,my_id):
                 form.save()
                 return redirect('homepage')
     else:
-        form = JobForm()
+        form = JobForm(instance=job)
     return render(request,'editJobForm.html',{'form':form})
 @login_required
 def deleteJobForm(request,my_id):
@@ -145,21 +149,37 @@ def deleteJobForm(request,my_id):
 def user_logout(request):
     logout(request)
     return redirect('registration')
-
 @login_required
 def jobRecruiterProfile(request):
+    jobRecruiters = JobRecruiterProfile.objects.get(users=request.user)
+    context = {
+        'jobRecruiters' : jobRecruiters
+    }
+    return render(request,'jobRecruiterProfile.html',context)
+@login_required
+def jobSeekerProfile(request):
+    jobSeekers = JobSeekerProfile.objects.get(users=request.user)
+    context = {
+        'jobSeekers' : jobSeekers
+    }
+    return render(request,'jobSeekerProfile.html',context)
+@login_required
+def updateJobRecruiterProfile(request):
     user = request.user
     if(request.method == 'POST'):
-            form = JobRecruiterProfileForm(request.POST,request.FILES,instance = user)
+            form = JobRecruiterProfileForm(request.POST,request.FILES,instance = user.jobrecruiterprofile)
             if form.is_valid():
                 form.save()
                 return redirect ('jobRecruiterProfile')
     else:
-        form = JobRecruiterProfileForm(instance = user)
-    return render(request,'JobRecruiterProfile.html',{'form':form})
+        form = JobRecruiterProfileForm(instance = user.jobrecruiterprofile)
+    context = {
+                "form": form
+            }
+    return render(request,'updateJobRecruiterProfile.html',context)
 
 @login_required
-def jobSeekerProfile(request):
+def updateJobSeekerProfile(request):
     user = request.user
     if(request.method == 'POST'):
             form = JobSeekerProfileForm(request.POST,request.FILES,instance = user.jobseekerprofile)
@@ -168,5 +188,65 @@ def jobSeekerProfile(request):
                 return redirect ('jobSeekerProfile')
     else:
         form = JobSeekerProfileForm(instance = user.jobseekerprofile)
-    return render(request,'jobSeekerProfile.html',{'form':form})
+    context = {
+        "form": form
+    }
+    return render(request,'updateJobSeekerProfile.html',context)
+@login_required
+def searchTitle(request):
+    jobs = []
+    if request.method=="GET":
+        search = request.GET.get('search')
+        print("Search = ", search)
+        if search:
+            if Job.objects.filter(
+                Q(title__contains = search) |
+                Q(description__contains = search) |
+                Q(category__contains = search)
+            ):
+                jobs = Job.objects.filter(
+                    Q(title__contains = search) |
+                    Q(description__contains = search) |
+                    Q(category__contains = search)
+                )
+                return render(request,'searchTitle.html',{"jobs":jobs})
+            else:
+                msg = {
+                    'error' : "No Relevant Skill Found"
+                }
+                return render(request,'search_skills_set.html',msg)
+        else:
+            msg = {
+                'error' : "No Job Found"
+            }
+        return render(request,'searchTitle.html',msg)
 
+@login_required
+def search_skills_set(request):
+    jobs = []
+    if request.method=="GET":
+        search = request.GET.get('search')
+        print("Search = ", search)
+        if search:
+            if Job.objects.filter(
+                Q(skills_set__contains = search)
+            ):
+                jobs = Job.objects.filter(
+                    Q(skills_set__contains = search)
+                )
+                return render(request,'search_skills_set.html',{"jobs":jobs})
+            else:
+                msg = {
+                    'error' : "No Relevant Skill Found"
+                }
+                return render(request,'search_skills_set.html',msg)
+        else:
+            msg = {
+                'error' : "No Relevant Skill Found"
+            }
+        return render(request,'search_skills_set.html',msg)
+
+@login_required
+def viewJob(request,id):
+    job = Job.objects.get(id=id)
+    return render(request,'viewJob.html',{"job":job})

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<br><br>
+<div class="container container-center">
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-secondary mb-6" style="max-width: 100rem;">
+                <div class="card-body text-secondary">
+                    <h5 class="card-title">{{job.title}}</h5>
+                    <p class="card-text">Number of Opening : {{job.number_of_opening}}</p>
+                    <p class="card-text">Catagory : {{job.category}}</p>
+                    <p class="card-text">Job Description : {{job.description}}</p>
+                    <p class="card-text">Skill Set : {{job.skills_set}}</p>
+                    
+                    {% if request.user.user_type == 'jobSeeker' %}
+                    <button>Apply</button>
+                    {% endif %}
+                    {% if request.user.user_type == 'jobRecruiter' and job.created_by.id == request.user.id %}
+                    <div class="row justify-content-center">
+                        <div class="col-md-3">
+                            <a href="{% url 'editJobForm' job.id %}" class="btn btn-primary">Edit</a>
+                            <a href="{% url 'deleteJobForm' job.id %}" class="btn btn-primary">Delete</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            </div>
+</div>
+</div>
+{% endblock %}

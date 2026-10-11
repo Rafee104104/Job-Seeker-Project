@@ -2,19 +2,25 @@
 {% block content %}
 <br><br>
 <div class="container container-center">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-
-            <form enctype="multipart/form-data" method="POST">
-                <h2>Job Seeker Profile</h2><br>
-                {% csrf_token %}
-                {{form.as_p}}
-                <br>
-                <input class="btn btn-success" type="submit" value="Update">
-            </form>
+    <div class="card border-none " style="max-width: 50rem;">
+        <div class="card-body text-primary">
+            <h5 class="card-title">Job Seeker Profile</h5>
+            <p class="card-text">Username : {{jobSeekers.name}}</p>
+            <p class="card-text">Email : {{jobSeekers.email}}</p>
+            <p class="card-text">Phone Number : {{jobSeekers.phone_number}}</p>
+            <p class="card-text">Location : {{jobSeekers.location}}</p>
+            {% if jobSeekers.image %}
+            <img src="{{ jobSeekers.image.url }}" width="100" height="100">
+            {% endif %}
+            {% if jobSeekers.cv %}
+            </iframe><a href="{{ jobSeekers.cv.url }}" target="_blank">
+                View/Download CV
+            </a>
+            {% endif %}
+            <br><br>
+            <a href="{% url 'updateJobSeekerProfile' %}" class="btn btn-primary">Update Profile</a>
+            <br>
         </div>
-
     </div>
 </div>
-
 {% endblock %}

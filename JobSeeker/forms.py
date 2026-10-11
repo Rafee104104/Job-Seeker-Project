@@ -3,67 +3,67 @@ from .models import *
 from django.contrib.auth.models import *
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 class LoginForm(AuthenticationForm):
-    username = forms.CharField(label='Username', widget=forms.TextInput(
-        attrs={
-            'class' : 'form-control',
-            'placeholder' : 'Input Username'
-        }
-    ))
-    password = forms.CharField(label='Password', widget=forms.PasswordInput(
-        attrs={
-            'class' : 'form-control',
-            'placeholder' : 'Input Password'
-        }
-    ))
+    # username = forms.CharField(label='Username', widget=forms.TextInput(
+    #     attrs={
+    #         'class' : 'form-control',
+    #         'placeholder' : 'Input Username'
+    #     }
+    # ))
+    # password = forms.CharField(label='Password', widget=forms.PasswordInput(
+    #     attrs={
+    #         'class' : 'form-control',
+    #         'placeholder' : 'Input Password'
+    #     }
+    # ))
     class Meta:
         model = CustomUser
         fields = ['username','password']
         # fields = ('__all__')
 
 class RegistrationForm(UserCreationForm):
-    username = forms.CharField(label='Username', widget=forms.TextInput(
-            attrs={
-                'class' : 'form-control',
-                'placeholder' : 'Input Username'
-            }
-    ))
-    email = forms.CharField(label='Email', widget=forms.TextInput(
-            attrs={
-               'class' : 'form-control',
-                'placeholder' : 'Input Email'
-            }
-    ))
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput(
-        attrs={
-            'class' : 'form-control',
-            'placeholder' : 'Input Password'
-        }
-    ))
-    password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput(
-        attrs={
-            'class' : 'form-control',
-            'placeholder' : 'Confirm Password'
-        }
-    ))
-    user_type = forms.ChoiceField(choices = [
-        ('','-Select an option-'),
-        ('jobSeeker','JobSeeker'),
-        ('jobRecruiter','JobRecruiter'),
-    ],widget = forms.Select(attrs={
-        "class":"form-select w-50"
-    }))
+    # username = forms.CharField(label='Username', widget=forms.TextInput(
+    #         attrs={
+    #             'class' : 'form-control',
+    #             'placeholder' : 'Input Username'
+    #         }
+    # ))
+    # email = forms.CharField(label='Email', widget=forms.TextInput(
+    #         attrs={
+    #            'class' : 'form-control',
+    #             'placeholder' : 'Input Email'
+    #         }
+    # ))
+    # password1 = forms.CharField(label='Password', widget=forms.PasswordInput(
+    #     attrs={
+    #         'class' : 'form-control',
+    #         'placeholder' : 'Input Password'
+    #     }
+    # ))
+    # password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput(
+    #     attrs={
+    #         'class' : 'form-control',
+    #         'placeholder' : 'Confirm Password'
+    #     }
+    # ))
+    # user_type = forms.ChoiceField(choices = [
+    #     ('','-Select an option-'),
+    #     ('jobSeeker','JobSeeker'),
+    #     ('jobRecruiter','JobRecruiter'),
+    # ],widget = forms.Select(attrs={
+    #     "class":"form-select w-50"
+    # }))
     # user_type = forms.CharField(label='User Type', widget=forms.TextInput(
     #     attrs={
     #         'class' : 'form-control',
     #         'placeholder' : 'User Type'
     #     }
     # ))
-    display_name = forms.CharField(label='Display Name', widget=forms.TextInput(
-        attrs={
-            'class' : 'form-control',
-            'placeholder' : 'Display Name'
-        }
-    ))
+    # display_name = forms.CharField(label='Display Name', widget=forms.TextInput(
+    #     attrs={
+    #         'class' : 'form-control',
+    #         'placeholder' : 'Display Name'
+    #     }
+    # ))
 
     class Meta:
         model = CustomUser
@@ -74,7 +74,7 @@ class RegistrationForm(UserCreationForm):
 class JobForm(forms.ModelForm):
     class Meta:
         model = Job
-        fields = ('__all__')
+        fields = ['title','number_of_opening','category','description','skills_set']
 
 class JobRecruiterProfileForm(forms.ModelForm):
     class Meta:
@@ -85,3 +85,5 @@ class JobSeekerProfileForm(forms.ModelForm):
     class Meta:
         model = JobSeekerProfile
         fields = ['name','email','phone_number','location','image','cv']
+
+        
